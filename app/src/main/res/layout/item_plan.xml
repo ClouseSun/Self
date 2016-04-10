@@ -6,7 +6,10 @@
     >
 
     <android.support.v7.widget.CardView
-        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         card_view:cardElevation="3dp"
@@ -25,11 +28,13 @@
                 android:layout_weight="5"
                 android:orientation="vertical">
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/cv_plan_icon"
                     android:layout_gravity="center_horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:src="@drawable/spring"/>
                 <TextView
+                    android:id="@+id/tv_plan_name"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="12dp"
                     android:layout_width="match_parent"
@@ -47,13 +52,13 @@
                 android:layout_height="match_parent"
                 android:layout_weight="5">
                 <TextView
+                    android:id="@+id/tv_plan_steak"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="12"
                     android:textSize="72sp"
                     android:gravity="center"
-                    android:fontFamily="serif"
-                    android:layout_gravity="top"/>
+                    android:layout_gravity="center"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -64,7 +69,8 @@
                     android:layout_gravity="bottom|right"
                     android:layout_marginBottom="12dp"
                     android:textStyle="italic"
-                    android:textColor="#ff898989"/>
+                    android:textColor="#ff898989"
+                    android:visibility="gone"/>
             </FrameLayout>
 
             <com.abition.self.uielement.SeparatorImageView
@@ -78,9 +84,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5">
-                <Button
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_check"
                     android:layout_gravity="center"
-                    android:text="start"
+                    android:text="check"
                     android:textColor="#fff"
                     android:layout_width="64dp"
                     android:layout_height="64dp"

@@ -19,7 +19,8 @@ public class SeparatorImageView extends ImageView {
         super(context, attrs);
 
         paint = new Paint();
-        paint.setColor(0xffcdcdcd);
+        paint.setStrokeWidth(2f);
+        paint.setColor(0xffCDCDCD);
     }
 
     public SeparatorImageView(Context context, AttributeSet attrs, int defStyleAttr) {

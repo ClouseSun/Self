@@ -17,4 +17,8 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="IconTheme">
+        <item name="android:tint">#787878</item>
+    </style>
+
 </resources>

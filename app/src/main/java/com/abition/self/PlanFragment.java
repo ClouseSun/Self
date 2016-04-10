@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.abition.self.uielement.PlanListAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,7 +40,15 @@ public class PlanFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_plan, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_plan_list);
-        recyclerView.setAdapter(new PlanListAdapter(null, getActivity()));
+
+        // TODO data here
+        List <Plan> tempList = new ArrayList<>();
+        tempList.add(new Plan("exercise", R.drawable.autumn, 13));
+        tempList.add(new Plan("reading", R.drawable.spring, 7));
+        tempList.add(new Plan("code", R.drawable.winter, 999));
+        // ~
+
+        recyclerView.setAdapter(new PlanListAdapter(tempList, getActivity()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return rootView;
     }
