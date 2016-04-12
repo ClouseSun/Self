@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.abition.self.uielement.PlanListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +44,10 @@ public class PlanFragment extends Fragment {
         // TODO data here
         List <Plan> tempList = new ArrayList<>();
         tempList.add(new Plan("exercise", R.drawable.autumn, 13));
-        tempList.add(new Plan("reading", R.drawable.spring, 7));
-        tempList.add(new Plan("code", R.drawable.winter, 999));
+        tempList.add(new Plan("read", R.drawable.spring, 7));
+        tempList.add(new Plan("English", R.drawable.winter, 25));
+        tempList.add(new Plan("Dr.Zheng's love", R.drawable.love, 666));
+        tempList.add(new Plan("code", R.drawable.night, 999));
         // ~
 
         recyclerView.setAdapter(new PlanListAdapter(tempList, getActivity()));

@@ -18,6 +18,8 @@ public class Plan {
         themeStyle.put(R.drawable.spring, 0xFF009688);
         themeStyle.put(R.drawable.autumn, 0xFFEF6C00);
         themeStyle.put(R.drawable.winter, 0xFF1E88E5);
+        themeStyle.put(R.drawable.night, 0xFF455A64);
+        themeStyle.put(R.drawable.love, 0xFFE91E63);
     }
 
     public Plan(String title, int themeImage, int steak) {

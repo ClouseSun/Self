@@ -11,11 +11,11 @@
 
     <ImageView
         android:layout_marginTop="72dp"
-        android:layout_width="56dp"
+        android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="center_horizontal"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_insert_invitation_white_36dp" />
+        android:src="@drawable/facebook"
+        android:tint="#FFFFFF"/>
 
     <LinearLayout
         android:layout_gravity="end|bottom"
@@ -55,14 +55,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_register"
+                android:id="@+id/tv_login"
                 android:gravity="center"
                 android:padding="12dp"
                 android:background="#FFFFFF"
                 android:textColor="#03A9F4"
                 android:layout_width="216dp"
                 android:layout_height="wrap_content"
-                android:text="register"
+                android:text="login"
                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
                 android:layout_gravity="center_horizontal"/>
 
@@ -71,7 +71,7 @@
                 android:textColor="#CDFFFFFF"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="login"
+                android:text="register"
                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
                 android:layout_gravity="center_horizontal"/>
         </LinearLayout>
