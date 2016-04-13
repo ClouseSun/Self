@@ -1,7 +1,7 @@
 package com.abition.self;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
@@ -12,12 +12,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.abition.self.Plan;
-import com.abition.self.R;
 
 import java.util.List;
 
@@ -50,8 +46,9 @@ public class PlanListAdapter extends RecyclerView.Adapter {
 
             return new ItemViewHolder(view);
         } else if (viewType == 1) {
-            CardView cardView = new CardView(context);
-            return new AddViewHolder(cardView);
+            View view = LayoutInflater.from(context).inflate(R.layout.item_add_plan, parent, false);
+            return new AddViewHolder(view);
+
         }
         return null;
     }

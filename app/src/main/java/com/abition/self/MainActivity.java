@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 int bR, bG, bB;
                 int eR, eG, eB;
-                int from, to;
 
                 for (int i = 0; i < funcBar.getChildCount(); i ++) {
                     if (i == position + 1 && position < 2) {
@@ -76,8 +75,6 @@ public class MainActivity extends AppCompatActivity
 
                     }
                 }
-                Log.i("MainActivity", position + ", " + positionOffset + ", " + positionOffsetPixels);
-
             }
 
             @Override

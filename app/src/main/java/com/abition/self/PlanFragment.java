@@ -46,7 +46,7 @@ public class PlanFragment extends Fragment {
         tempList.add(new Plan("exercise", R.drawable.autumn, 13));
         tempList.add(new Plan("read", R.drawable.spring, 7));
         tempList.add(new Plan("English", R.drawable.winter, 25));
-        tempList.add(new Plan("Dr.Zheng's love", R.drawable.love, 666));
+        tempList.add(new Plan("love", R.drawable.love, 666));
         tempList.add(new Plan("code", R.drawable.night, 999));
         // ~
 
