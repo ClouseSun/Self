@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
@@ -68,6 +69,7 @@ public class PlanListAdapter extends RecyclerView.Adapter {
             item.imageView.setImageResource(planList.get(position).getThemeImage());
             item.checkBtn.setSupportBackgroundTintList(
                     ColorStateList.valueOf(Plan.themeStyle.get(planList.get(position).getThemeImage())));
+            item.edgeView.setBackgroundColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
 
             item.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -85,6 +87,17 @@ public class PlanListAdapter extends RecyclerView.Adapter {
                 }
             });
         }
+        else if (holder instanceof AddViewHolder) {
+            AddViewHolder item = (AddViewHolder) holder;
+            item.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, NewPlanActivity.class);
+                    context.startActivity(intent);
+                }
+            });
+
+        }
     }
 
     @Override
@@ -100,6 +113,7 @@ public class PlanListAdapter extends RecyclerView.Adapter {
         ImageView imageView;
         AppCompatButton checkBtn;
         CardView cardView;
+        ImageView edgeView;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -109,16 +123,21 @@ public class PlanListAdapter extends RecyclerView.Adapter {
             imageView = (ImageView) view.findViewById(R.id.cv_plan_icon);
             checkBtn = (AppCompatButton) view.findViewById(R.id.btn_check);
             cardView = (CardView) view.findViewById(R.id.cv_plan);
+            edgeView = (ImageView) view.findViewById(R.id.iv_plan_edge);
         }
     }
 
     class AddViewHolder extends RecyclerView.ViewHolder
     {
         View view;
+
         ImageView addImage;
+        CardView cardView;
 
         public AddViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
+            cardView = (CardView) view.findViewById(R.id.cv_plan_add);
         }
     }
 }
