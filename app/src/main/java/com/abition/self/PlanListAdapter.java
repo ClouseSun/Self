@@ -1,6 +1,5 @@
 package com.abition.self;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -113,7 +112,7 @@ public class PlanListAdapter extends RecyclerView.Adapter {
         ImageView imageView;
         AppCompatButton checkBtn;
         CardView cardView;
-        ImageView edgeView;
+        View edgeView;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -123,7 +122,7 @@ public class PlanListAdapter extends RecyclerView.Adapter {
             imageView = (ImageView) view.findViewById(R.id.cv_plan_icon);
             checkBtn = (AppCompatButton) view.findViewById(R.id.btn_check);
             cardView = (CardView) view.findViewById(R.id.cv_plan);
-            edgeView = (ImageView) view.findViewById(R.id.iv_plan_edge);
+            edgeView = view.findViewById(R.id.ll_plan_edge);
         }
     }
 
