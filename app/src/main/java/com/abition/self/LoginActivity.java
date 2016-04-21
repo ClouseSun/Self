@@ -28,10 +28,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.SaveListener;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -63,6 +65,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    static final int doLogin = 1;
+    static final int doSignIn = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,18 +82,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.btn_login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptLogin(1);
                     return true;
                 }
                 return false;
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.btn_login);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button LoginButton = (Button) findViewById(R.id.btn_login);
+        LoginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptLogin(doLogin);
+            }
+        });
+        Button SignInButton = (Button) findViewById(R.id.btn_sign_in);
+        SignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptLogin(doSignIn);
             }
         });
 
@@ -146,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptLogin(int loginOrSignIn) {
         if (mAuthTask != null) {
             return;
         }
@@ -188,7 +199,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, password, loginOrSignIn);
             mAuthTask.execute((Void) null);
         }
     }
@@ -301,42 +312,43 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private final int loginOrSignIn;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String password, int loginOrSignIn) {
             mEmail = email;
             mPassword = password;
+            this.loginOrSignIn = loginOrSignIn;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            final BmobUser user = new BmobUser();
+            user.setUsername(mEmail);
+            user.setPassword(mPassword);
+            if (loginOrSignIn == doLogin) {
+                    user.login(LoginActivity.this, new SaveListener() {
+                        @Override
+                        public void onSuccess() {
+                            //TODO: mainActivity
+                        }
 
-            try {
-                final User user = new User();
-                user.setUserName(mEmail);
-                user.setPassword(mPassword);
-                user.save(LoginActivity.this, new SaveListener() {
+                        @Override
+                        public void onFailure(int i, String s) {
+
+                        }
+                    });
+            } else {
+                user.signUp(LoginActivity.this, new SaveListener() {
                     @Override
                     public void onSuccess() {
-                        Toast.makeText(getApplicationContext(), "添加数据成功，返回objectId为：" + user.getObjectId() + ",数据在服务端的创建时间为：" + user.getCreatedAt(), Toast.LENGTH_SHORT).show();
+
                     }
 
                     @Override
                     public void onFailure(int i, String s) {
-                        Toast.makeText(getApplicationContext(), "添加数据失败", Toast.LENGTH_SHORT).show();
+
                     }
                 });
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
             }
 
             // TODO: register the new account here.
