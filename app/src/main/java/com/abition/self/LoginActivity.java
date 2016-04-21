@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -66,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     static final int doLogin = 1;
-    static final int doSignIn = 2;
+    static final int doSignUp = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +98,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 attemptLogin(doLogin);
             }
         });
-        Button SignInButton = (Button) findViewById(R.id.btn_sign_in);
-        SignInButton.setOnClickListener(new OnClickListener() {
+        Button SignUpButton = (Button) findViewById(R.id.btn_sign_in);
+        SignUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptLogin(doSignIn);
+                attemptLogin(doSignUp);
             }
         });
 
@@ -157,7 +159,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin(int loginOrSignIn) {
+    private void attemptLogin(int loginOrSignUp) {
         if (mAuthTask != null) {
             return;
         }
@@ -199,7 +201,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password, loginOrSignIn);
+            mAuthTask = new UserLoginTask(email, password, loginOrSignUp);
             mAuthTask.execute((Void) null);
         }
     }
@@ -312,12 +314,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-        private final int loginOrSignIn;
+        private final int loginOrSignUp;
+        boolean success = true;
 
-        UserLoginTask(String email, String password, int loginOrSignIn) {
+        UserLoginTask(String email, String password, int loginOrSignUp) {
+            String sha1 = null;
+            try {
+                MessageDigest digest = java.security.MessageDigest
+                        .getInstance("SHA-1");
+                digest.update(password.getBytes());
+                byte messageDigest[] = digest.digest();
+                StringBuffer hexString = new StringBuffer();
+                for (int i = 0; i < messageDigest.length; i++) {
+                    String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
+                    if (shaHex.length() < 2) {
+                        hexString.append(0);
+                    }
+                    hexString.append(shaHex);
+                    sha1=hexString.toString();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             mEmail = email;
-            mPassword = password;
-            this.loginOrSignIn = loginOrSignIn;
+            mPassword = sha1;
+            this.loginOrSignUp = loginOrSignUp;
         }
 
         @Override
@@ -325,34 +346,41 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             final BmobUser user = new BmobUser();
             user.setUsername(mEmail);
             user.setPassword(mPassword);
-            if (loginOrSignIn == doLogin) {
-                    user.login(LoginActivity.this, new SaveListener() {
-                        @Override
-                        public void onSuccess() {
-                            //TODO: mainActivity
-                        }
-
-                        @Override
-                        public void onFailure(int i, String s) {
-
-                        }
-                    });
-            } else {
-                user.signUp(LoginActivity.this, new SaveListener() {
+            if (loginOrSignUp == doLogin) {
+                user.login(LoginActivity.this, new SaveListener() {
                     @Override
                     public void onSuccess() {
-
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                        startActivity(intent);
                     }
 
                     @Override
                     public void onFailure(int i, String s) {
+                        mEmailView.setError(s);
+                        success = false;
+                    }
+                });
+            } else {
+                user.signUp(LoginActivity.this, new SaveListener() {
+                    @Override
+                    public void onSuccess() {
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                        startActivity(intent);
+                    }
 
+                    @Override
+                    public void onFailure(int i, String s) {
+                        mEmailView.setError(s);
+                        success = false;
                     }
                 });
             }
-
-            // TODO: register the new account here.
-            return true;
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return success;
         }
 
         @Override
@@ -363,8 +391,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                mEmailView.requestFocus();
             }
         }
 
