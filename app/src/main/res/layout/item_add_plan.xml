@@ -14,6 +14,7 @@
         android:layout_height="120dp"
         card_view:cardElevation="3dp"
         card_view:cardCornerRadius="6dp"
+        android:foreground="?android:attr/selectableItemBackground"
         >
 
         <ImageView

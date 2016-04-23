@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="计划"
+                    android:text="PLAN"
                     android:textColor="#00C853"/>
             </LinearLayout>
 
@@ -76,7 +76,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="分享"
+                    android:text="SHARE"
                     android:gravity="center"/>
             </LinearLayout>
 
@@ -96,7 +96,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="我"
+                    android:text="ME"
                     android:gravity="center"/>
             </LinearLayout>
 

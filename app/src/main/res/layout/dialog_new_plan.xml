@@ -39,6 +39,7 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_done_white_24px"
                 android:id="@+id/iv_ok"
+                android:foreground="?android:attr/selectableItemBackground"
                 />
             </LinearLayout>
         <EditText
