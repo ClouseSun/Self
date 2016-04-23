@@ -32,6 +32,7 @@
         app:cardBackgroundColor="#43A047"
         android:id="@+id/cv_reset_psw">
         <TextView
+            android:id="@+id/view_reset_password"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Reset Password"
@@ -46,6 +47,7 @@
         android:layout_height="48dp"
         app:cardBackgroundColor="#E53935">
         <TextView
+            android:id="@+id/view_sign_out"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Sign out"
