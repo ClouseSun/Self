@@ -29,7 +29,8 @@
         android:layout_marginBottom="24dp"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        app:cardBackgroundColor="#43A047">
+        app:cardBackgroundColor="#43A047"
+        android:id="@+id/cv_reset_psw">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -3,7 +3,6 @@ package com.abition.self;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
@@ -91,8 +90,7 @@ public class PlanListAdapter extends RecyclerView.Adapter {
             item.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, NewPlanActivity.class);
-                    context.startActivity(intent);
+                    ((MainActivity)context).newPlanDialog.show(((MainActivity)context).getSupportFragmentManager(), null);
                 }
             });
 

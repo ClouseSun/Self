@@ -1,7 +1,6 @@
 package com.abition.self;
 
 import android.graphics.Color;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +17,8 @@ public class MainActivity extends AppCompatActivity
                 implements View.OnClickListener{
 
     private ViewPager viewPager;
+    NewPlanDialog newPlanDialog;
+    PswResetDialog pswResetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        newPlanDialog = new NewPlanDialog();
+        pswResetDialog = new PswResetDialog();
 
         viewPager = (ViewPager) findViewById(R.id.vp_content);
         viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
@@ -124,4 +128,6 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
     }
+
+
 }

@@ -21,4 +21,8 @@
         <item name="android:tint">#787878</item>
     </style>
 
+    <style name="NewPlanTheme" parent="AppTheme">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
 </resources>
