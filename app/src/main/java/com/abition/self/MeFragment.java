@@ -45,6 +45,7 @@ public class MeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).pswResetDialog.show((getActivity()).getSupportFragmentManager(), null);
+
             }
         });
 
@@ -55,13 +56,13 @@ public class MeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         TextView resetPasswordView = (TextView) getView().findViewById(R.id.view_reset_password);
-        TextView signOutView = (TextView)getView().findViewById(R.id.view_sign_out);
+        TextView signOutView = (TextView) getView().findViewById(R.id.view_sign_out);
         signOutView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BmobUser user = BmobUser.getCurrentUser(getActivity());
                 user.logOut(getActivity());
-                Intent intent = new Intent(getActivity(),LoginActivity.class);
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
                 getActivity().finish();
                 startActivity(intent);
             }
