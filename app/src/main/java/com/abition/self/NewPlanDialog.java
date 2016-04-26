@@ -3,14 +3,21 @@ package com.abition.self;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.abition.self.uielement.CircleImageView;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by KlousesSun on 16/4/23.
@@ -20,6 +27,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
     TextView dateFrom;
     TextView dateTo;
     ImageView okImage;
+    LinearLayout typeImage;
 
     @NonNull
     @Override
@@ -28,6 +36,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
         dateFrom = (TextView) view.findViewById(R.id.tv_date_from);
         dateTo = (TextView) view.findViewById(R.id.tv_date_to);
         okImage = (ImageView) view.findViewById(R.id.iv_ok);
+        typeImage = (LinearLayout) view.findViewById(R.id.ll_type_img);
         final Calendar calendar = Calendar.getInstance();
         dateFrom.setText(calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(calendar.DATE));
         dateTo.setText(calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(calendar.DATE));
@@ -39,6 +48,42 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
                 dismiss();
             }
         });
+
+        List<Integer> imageList =  new ArrayList<>();
+        imageList.add(R.drawable.autumn);
+        imageList.add(R.drawable.spring);
+        imageList.add(R.drawable.winter);
+        imageList.add(R.drawable.love);
+        imageList.add(R.drawable.night);
+
+
+        for (Integer id : imageList) {
+            final CircleImageView circleImageView = new CircleImageView(getActivity());
+            circleImageView.setImageResource(id);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, 120);
+            layoutParams.weight = 1;
+            circleImageView.setLayoutParams(layoutParams);
+            typeImage.addView(circleImageView);
+
+            circleImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for(int i = 0; i < typeImage.getChildCount(); i++) {
+                        CircleImageView tempCircleImageView = (CircleImageView) typeImage.getChildAt(i);
+                        tempCircleImageView.setBorderWidth(0);
+                    }
+                    circleImageView.setBorderWidth(8);
+                    circleImageView.setBorderColor(0xFF3CB371);
+                }
+            });
+        }
+
+        if(imageList.size() > 0) {
+            CircleImageView tempCircleImageView = (CircleImageView) typeImage.getChildAt(0);
+            tempCircleImageView.setBorderWidth(8);
+            tempCircleImageView.setBorderColor(0xFF3CB371);
+        }
+
         return new AlertDialog.Builder(getActivity()).setView(view).create();
     }
 
