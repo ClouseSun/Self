@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.abition.self.uielement.CornerLabel;
+
 import java.util.List;
 
 /**
@@ -57,16 +59,49 @@ public class PlanListAdapter extends RecyclerView.Adapter {
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder item = (ItemViewHolder) holder;
             if (planList.get(position).getSteak() >= 100)
-                item.steakText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 56);
+                item.steakText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
             else
-                item.steakText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 72);
+                item.steakText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 48);
+
+            if (planList.get(position).getTarget() >= 100)
+                item.targetText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
+            else
+                item.targetText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 48);
+
+            if (planList.get(position).getTitle().length() >= 7)
+                item.themeText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            else
+                item.themeText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
+
             item.steakText.setText(planList.get(position).getSteak() + "");
             item.steakText.setTextColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
+            item.targetText.setText(planList.get(position).getTarget() + "");
+            item.targetText.setTextColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
+            item.separator.setTextColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
             item.themeText.setText(planList.get(position).getTitle());
             item.themeText.setTextColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
             item.imageView.setImageResource(planList.get(position).getThemeImage());
             item.checkBtn.setSupportBackgroundTintList(
                     ColorStateList.valueOf(Plan.themeStyle.get(planList.get(position).getThemeImage())));
+
+            switch (planList.get(position).getStatus())
+            {
+                case PROCESSING:
+                    //item.checkBtn.setSupportBackgroundTintList(ColorStateList.valueOf(0xFFFDB124));
+                    item.cornerLabel.setPaintColor(0xFFFDB124);
+                    //item.edgeView.setBackgroundColor(0xFFFDB124);
+                    break;
+                case FINISHED:
+                    item.cornerLabel.setPaintColor(0xFF2AC833);
+                    //item.checkBtn.setSupportBackgroundTintList(ColorStateList.valueOf(0xFF2AC833));
+                    //item.edgeView.setBackgroundColor(0xFF2AC833);
+                    break;
+                case FAILED:
+                    item.cornerLabel.setPaintColor(0xFF9A9A9A);
+                    //item.checkBtn.setSupportBackgroundTintList(ColorStateList.valueOf(0xFF9A9A9A));
+                    //item.edgeView.setBackgroundColor(0xFF9A9A9A);
+                    break;
+            }
             item.edgeView.setBackgroundColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
 
             item.cardView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -107,9 +142,12 @@ public class PlanListAdapter extends RecyclerView.Adapter {
 
         TextView steakText;
         TextView themeText;
+        TextView targetText;
+        TextView separator;
         ImageView imageView;
         AppCompatButton checkBtn;
         CardView cardView;
+        CornerLabel cornerLabel;
         View edgeView;
 
         public ItemViewHolder(View itemView) {
@@ -117,10 +155,13 @@ public class PlanListAdapter extends RecyclerView.Adapter {
             view = itemView;
             steakText = (TextView) view.findViewById(R.id.tv_plan_steak);
             themeText = (TextView) view.findViewById(R.id.tv_plan_name);
+            targetText = (TextView) view.findViewById(R.id.tv_plan_target);
+            separator = (TextView) view.findViewById(R.id.tv_plan_separator);
             imageView = (ImageView) view.findViewById(R.id.cv_plan_icon);
             checkBtn = (AppCompatButton) view.findViewById(R.id.btn_check);
             cardView = (CardView) view.findViewById(R.id.cv_plan);
             edgeView = view.findViewById(R.id.ll_plan_edge);
+            cornerLabel = (CornerLabel) view.findViewById(R.id.cl_label);
         }
     }
 

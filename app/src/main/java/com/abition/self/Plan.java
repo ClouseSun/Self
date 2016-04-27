@@ -6,10 +6,21 @@ import java.util.Map;
 /**
  * Created by KlousesSun on 16/4/9.
  */
-public class Plan {
+public class Plan implements Comparable <Plan> {
     private String title;
     private int themeImage;
     private int steak;
+    private int target;
+    private Status status;
+
+    @Override
+    public int compareTo(Plan another) {
+        return this.status.ordinal() - another.status.ordinal();
+    }
+
+    public enum Status {
+        PROCESSING, FINISHED, FAILED
+    }
 
     static public Map<Integer, Integer> themeStyle;
 
@@ -22,10 +33,28 @@ public class Plan {
         themeStyle.put(R.drawable.love, 0xFFE91E63);
     }
 
-    public Plan(String title, int themeImage, int steak) {
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public int getTarget() {
+        return target;
+    }
+
+    public void setTarget(int target) {
+        this.target = target;
+    }
+
+    public Plan(String title, int themeImage, int steak, int target, Status status) {
         this.title = title;
         this.themeImage = themeImage;
         this.steak = steak;
+        this.status = status;
+        this.target = target;
     }
 
     public void setThemeImage(int themeImage) {
