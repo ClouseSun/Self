@@ -7,6 +7,7 @@ import java.util.Map;
  * Created by KlousesSun on 16/4/9.
  */
 public class Plan {
+    private _Plan plan;
     private String title;
     private int themeImage;
     private int steak;
