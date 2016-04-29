@@ -24,6 +24,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import cn.bmob.v3.BmobUser;
+
 /**
  * Created by KlousesSun on 16/4/23.
  */
@@ -39,7 +41,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_plan, null, false);
+        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_new_plan, null, false);
         dateFrom = (TextView) view.findViewById(R.id.tv_date_from);
         dateTo = (TextView) view.findViewById(R.id.tv_date_to);
         okImage = (ImageView) view.findViewById(R.id.iv_ok);
@@ -47,10 +49,10 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
         planTitle = (EditText)view.findViewById(R.id.title_plan);
         final Calendar calendar = Calendar.getInstance();
         String month, day;
-        if (Calendar.MONTH > 8) {
-            month = String.valueOf(Calendar.MONTH + 1);
+        if (calendar.MONTH > 8) {
+            month = String.valueOf(calendar.MONTH + 1);
         } else {
-            month = "0" + (Calendar.MONTH + 1);
+            month = "0" + calendar.MONTH + 1;
         }
         if (calendar.DATE > 9) {
             day = String.valueOf(calendar.DATE);
@@ -64,7 +66,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
         okImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date date_from,date_to;
+                Date date_from = null,date_to = null;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String dateFromString = dateFrom.getText().toString();
                 String dateToString = dateTo.getText().toString();
@@ -74,8 +76,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                //TODO: continue
-                //Plan newPlan = new Plan(planTitle.getText().toString(),);
+                Plan newPlan = new Plan(planTitle.getText().toString(),themeImage,date_from,date_to,getActivity());
                 dismiss();
             }
         });
