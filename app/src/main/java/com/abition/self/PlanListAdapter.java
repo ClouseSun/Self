@@ -44,7 +44,6 @@ public class PlanListAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == 0) {
             View view = LayoutInflater.from(context).inflate(R.layout.item_plan, parent, false);
-
             return new ItemViewHolder(view);
         } else if (viewType == 1) {
             View view = LayoutInflater.from(context).inflate(R.layout.item_add_plan, parent, false);

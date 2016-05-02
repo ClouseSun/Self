@@ -15,7 +15,7 @@ public class FragmentAdapter extends FragmentPagerAdapter {
             case 0:
                 return PlanFragment.getInstance();
             case 1:
-                return ShareFragment.getInstance();
+                return AchivFragment.getInstance();
             case 2:
                 return MeFragment.getInstance();
             default:
