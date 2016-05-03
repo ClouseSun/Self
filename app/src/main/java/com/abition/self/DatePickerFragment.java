@@ -16,6 +16,7 @@ import java.util.Calendar;
  */
 public class DatePickerFragment extends DialogFragment {
     int from;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +31,19 @@ public class DatePickerFragment extends DialogFragment {
         return new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                NewPlanDialog newPlanDialog = ((MainActivity)getActivity()).newPlanDialog;
-                newPlanDialog.setDateText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth, from);
+                NewPlanDialog newPlanDialog = ((MainActivity) getActivity()).newPlanDialog;
+                String month, day;
+                if (monthOfYear > 8) {
+                    month = String.valueOf(monthOfYear + 1);
+                } else {
+                    month = "0" + (monthOfYear + 1);
+                }
+                if (dayOfMonth > 9) {
+                    day = String.valueOf(dayOfMonth);
+                } else {
+                    day = "0" + dayOfMonth;
+                }
+                newPlanDialog.setDateText(year + "-" + month + "-" + day, from);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
     }

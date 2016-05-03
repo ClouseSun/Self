@@ -73,15 +73,15 @@ public class PlanListAdapter extends RecyclerView.Adapter {
                 item.themeText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21);
 
             item.steakText.setText(planList.get(position).getSteak() + "");
-            item.steakText.setTextColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
+            item.steakText.setTextColor(Plan.themeStyle.get(planList.get(position).getType()));
             item.targetText.setText(planList.get(position).getTarget() + "");
-            item.targetText.setTextColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
-            item.separator.setTextColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
+            item.targetText.setTextColor(Plan.themeStyle.get(planList.get(position).getType()));
+            item.separator.setTextColor(Plan.themeStyle.get(planList.get(position).getType()));
             item.themeText.setText(planList.get(position).getTitle());
-            item.themeText.setTextColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
-            item.imageView.setImageResource(planList.get(position).getThemeImage());
+            item.themeText.setTextColor(Plan.themeStyle.get(planList.get(position).getType()));
+            item.imageView.setImageResource(planList.get(position).getType());
             item.checkBtn.setSupportBackgroundTintList(
-                    ColorStateList.valueOf(Plan.themeStyle.get(planList.get(position).getThemeImage())));
+                    ColorStateList.valueOf(Plan.themeStyle.get(planList.get(position).getType())));
 
             switch (planList.get(position).getStatus())
             {
@@ -101,7 +101,7 @@ public class PlanListAdapter extends RecyclerView.Adapter {
                     //item.edgeView.setBackgroundColor(0xFF9A9A9A);
                     break;
             }
-            item.edgeView.setBackgroundColor(Plan.themeStyle.get(planList.get(position).getThemeImage()));
+            item.edgeView.setBackgroundColor(Plan.themeStyle.get(planList.get(position).getType()));
 
             item.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

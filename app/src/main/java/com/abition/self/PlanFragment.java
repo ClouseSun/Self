@@ -38,19 +38,13 @@ public class PlanFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_plan, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_plan_list);
+        //get plan data
+        List <Plan> planList = new ArrayList<>();
+        Plan.getUserPlan(getActivity(),planList);
 
-        // TODO data here
-        List <Plan> tempList = new ArrayList<>();
-        tempList.add(new Plan("exercise", R.drawable.autumn, 13, 20, Plan.Status.PROCESSING));
-        tempList.add(new Plan("read", R.drawable.spring, 7, 7, Plan.Status.FINISHED));
-        tempList.add(new Plan("English", R.drawable.winter, 25, 60, Plan.Status.PROCESSING));
-        tempList.add(new Plan("love", R.drawable.love, 666, 700, Plan.Status.FAILED));
-        tempList.add(new Plan("code", R.drawable.night, 999, 999, Plan.Status.FINISHED));
-        // ~
+        Collections.sort(planList);
 
-        Collections.sort(tempList);
-
-        recyclerView.setAdapter(new PlanListAdapter(tempList, getActivity()));
+        recyclerView.setAdapter(new PlanListAdapter(planList, getActivity()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return rootView;
     }
