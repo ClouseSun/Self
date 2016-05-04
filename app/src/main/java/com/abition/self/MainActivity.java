@@ -33,6 +33,12 @@ public class MainActivity extends AppCompatActivity
         viewPager = (ViewPager) findViewById(R.id.vp_content);
         viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
 
+        //
+        viewPager.setOffscreenPageLimit(6);
+
+
+        //
+
         final LinearLayout funcBar = (LinearLayout) findViewById(R.id.ll_function_bar);
 
         for(int i = 0; i < funcBar.getChildCount(); i++) {

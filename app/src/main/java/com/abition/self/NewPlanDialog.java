@@ -36,7 +36,8 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
     ImageView okImage;
     LinearLayout typeImage;
     EditText planTitle;
-    Integer themeImage = 0;
+    Integer themeImage = R.drawable.autumn;
+    PlanListAdapter adapter;
 
     @NonNull
     @Override
@@ -52,7 +53,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
         if (calendar.MONTH > 8) {
             month = String.valueOf(calendar.MONTH + 1);
         } else {
-            month = "0" + calendar.MONTH + 1;
+            month = "0" + (calendar.MONTH + 1);
         }
         if (calendar.DATE > 9) {
             day = String.valueOf(calendar.DATE);
@@ -77,6 +78,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
                     e.printStackTrace();
                 }
                 Plan newPlan = new Plan(planTitle.getText().toString(),themeImage,date_from,date_to,getActivity());
+                PlanFragment.getInstance().refresh();
                 dismiss();
             }
         });
@@ -150,5 +152,11 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
         }
         fragment.setArguments(args);
         fragment.show(((MainActivity) getActivity()).getSupportFragmentManager(), null);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
     }
 }

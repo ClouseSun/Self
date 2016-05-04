@@ -55,7 +55,7 @@ public class AchivListAdapter extends RecyclerView.Adapter {
                 item.edgeView.setBackgroundColor(0xFF2AC833);
             }
             else {
-                item.imageView.setImageResource(R.drawable.unknown);
+                item.imageView.setImageResource(R.drawable.love);
                 item.edgeView.setBackgroundColor(0xFF455A64);
             }
         }

@@ -82,14 +82,26 @@ public class PlanListAdapter extends RecyclerView.Adapter {
             item.imageView.setImageResource(planList.get(position).getType());
             item.checkBtn.setSupportBackgroundTintList(
                     ColorStateList.valueOf(Plan.themeStyle.get(planList.get(position).getType())));
+            item.checkBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Plan plan = planList.get(position);
+                    if(plan.canCheck(context)){
+                        plan.checkPlan(context);
+                    }
+                }
+            });
 
             switch (planList.get(position).getStatus())
             {
-                case PROCESSING:
+                //TODO
+                case PROCESSING_UNCHECKED:
                     //item.checkBtn.setSupportBackgroundTintList(ColorStateList.valueOf(0xFFFDB124));
-                    item.cornerLabel.setPaintColor(0xFFFDB124);
+                    item.cornerLabel.setPaintColor(0xFFDD9104);
                     //item.edgeView.setBackgroundColor(0xFFFDB124);
                     break;
+                case PROCESSING_CHECKED:
+                    item.cornerLabel.setPaintColor(0xFFFDB124);
                 case FINISHED:
                     item.cornerLabel.setPaintColor(0xFF2AC833);
                     //item.checkBtn.setSupportBackgroundTintList(ColorStateList.valueOf(0xFF2AC833));
@@ -125,6 +137,7 @@ public class PlanListAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).newPlanDialog.show(((MainActivity)context).getSupportFragmentManager(), null);
+                    Plan.getUserPlan(context,planList);
                 }
             });
 
@@ -162,6 +175,11 @@ public class PlanListAdapter extends RecyclerView.Adapter {
             edgeView = view.findViewById(R.id.ll_plan_edge);
             cornerLabel = (CornerLabel) view.findViewById(R.id.cl_label);
         }
+    }
+
+    public void onListChange(){
+        notifyItemInserted(planList.size() - 1);
+        notifyItemRangeChanged(planList.size() - 1, planList.size());
     }
 
     class AddViewHolder extends RecyclerView.ViewHolder

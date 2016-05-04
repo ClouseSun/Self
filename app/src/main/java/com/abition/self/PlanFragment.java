@@ -2,9 +2,11 @@ package com.abition.self;
 
 
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import android.os.Handler;
 
 
 /**
@@ -39,13 +42,19 @@ public class PlanFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_plan, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_plan_list);
         //get plan data
-        List <Plan> planList = new ArrayList<>();
-        Plan.getUserPlan(getActivity(),planList);
-
-        Collections.sort(planList);
-
-        recyclerView.setAdapter(new PlanListAdapter(planList, getActivity()));
+        refresh();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return rootView;
+    }
+
+    public void refresh(){
+        final List <Plan> planList = new ArrayList<>();
+        Plan.getUserPlan(getActivity(),planList);
+    }
+
+    public void refreshList(List <Plan> planList){
+        Collections.sort(planList);
+        final PlanListAdapter adapter = new PlanListAdapter(planList, getActivity());
+        recyclerView.setAdapter(adapter);
     }
 }
