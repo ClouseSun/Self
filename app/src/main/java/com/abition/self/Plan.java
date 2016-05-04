@@ -14,6 +14,7 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.listener.DeleteListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetServerTimeListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -182,5 +183,21 @@ public class Plan implements Comparable<Plan> {
         int x = Status.PROCESSING_UNCHECKED.ordinal();
         boolean success = status - x == 0;
         return success;
+    }
+
+    public void deletePlan(Context context){
+        PlanTable planTable = new PlanTable();
+        planTable.setObjectId(plan.getObjectId());
+        planTable.delete(context, new DeleteListener() {
+            @Override
+            public void onSuccess() {
+                PlanFragment.getInstance().refresh();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Log.i("bmob","删除失败："+ s);
+            }
+        });
     }
 }

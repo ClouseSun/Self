@@ -153,10 +153,4 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
         fragment.setArguments(args);
         fragment.show(((MainActivity) getActivity()).getSupportFragmentManager(), null);
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
 }

@@ -94,7 +94,6 @@ public class PlanListAdapter extends RecyclerView.Adapter {
 
             switch (planList.get(position).getStatus())
             {
-                //TODO
                 case PROCESSING_UNCHECKED:
                     //item.checkBtn.setSupportBackgroundTintList(ColorStateList.valueOf(0xFFFDB124));
                     item.cornerLabel.setPaintColor(0xFFDD9104);
@@ -122,9 +121,7 @@ public class PlanListAdapter extends RecyclerView.Adapter {
                             .setItems(new String[]{"Delete"}, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    planList.remove(position);
-                                    notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, planList.size());
+                                    planList.get(position).deletePlan(context);
                                 }
                             }).create().show();
                     return false;
@@ -175,11 +172,6 @@ public class PlanListAdapter extends RecyclerView.Adapter {
             edgeView = view.findViewById(R.id.ll_plan_edge);
             cornerLabel = (CornerLabel) view.findViewById(R.id.cl_label);
         }
-    }
-
-    public void onListChange(){
-        notifyItemInserted(planList.size() - 1);
-        notifyItemRangeChanged(planList.size() - 1, planList.size());
     }
 
     class AddViewHolder extends RecyclerView.ViewHolder
