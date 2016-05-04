@@ -155,6 +155,7 @@ public class Plan implements Comparable<Plan> {
                             planList.add(plan);
                         }
                         PlanFragment.getInstance().refreshList(planList);
+                        AchivFragment.getInstance().refreshList(planList);
                     }
 
                     @Override
