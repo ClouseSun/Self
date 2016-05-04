@@ -21,7 +21,8 @@ public class MeFragment extends Fragment {
 
     private static MeFragment mInstance;
 
-    CardView cardView;
+    CardView resetView;
+    CardView shareView;
 
     public MeFragment() {
         // Required empty public constructor
@@ -39,12 +40,26 @@ public class MeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_me, container, false);
-        cardView = (CardView) rootView.findViewById(R.id.cv_reset_psw);
+        resetView = (CardView) rootView.findViewById(R.id.cv_reset_psw);
 
-        cardView.setOnClickListener(new View.OnClickListener() {
+        shareView = (CardView) rootView.findViewById(R.id.cv_share);
+
+        resetView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity)getActivity()).pswResetDialog.show((getActivity()).getSupportFragmentManager(), null);
+
+            }
+        });
+
+        shareView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareInt=new Intent();
+                shareInt.setAction("Intent.ACTION_SEND");
+                shareInt.putExtra(Intent.EXTRA_TEXT,"Sharing From SELF");
+                shareInt.setType("text/plain");
+                startActivity(Intent.createChooser(shareInt,"Sharing to"));
 
             }
         });
