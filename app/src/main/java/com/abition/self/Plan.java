@@ -51,6 +51,10 @@ public class Plan implements Comparable<Plan> {
         themeStyle.put(R.drawable.love, 0xFFE91E63);
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -121,7 +125,7 @@ public class Plan implements Comparable<Plan> {
         this.target = (int) ((dateTo.getTime() - dateFrom.getTime()) / (24 * 60 * 60 * 1000)) + 1;
     }
 
-    static public void getUserPlan(Context context, final List<Plan> planList) {
+    static public void getUserPlan(final Context context, final List<Plan> planList) {
         BmobUser user = BmobUser.getCurrentUser(context);
         BmobQuery<PlanTable> query = new BmobQuery<PlanTable>();
         query.addWhereEqualTo("user_id", user.getObjectId());
@@ -129,13 +133,35 @@ public class Plan implements Comparable<Plan> {
 
         query.findObjects(context, new FindListener<PlanTable>() {
             @Override
-            public void onSuccess(List<PlanTable> object) {
-                for (PlanTable planData : object) {
-                    Plan plan = new Plan(planData);
-                    planList.add(plan);
-                    PlanFragment.getInstance().refreshList(planList);
-                }
-                PlanFragment.getInstance().refreshList(planList);
+            public void onSuccess(final List<PlanTable> object) {
+                Bmob.getServerTime(context, new GetServerTimeListener() {
+                    @Override
+                    public void onSuccess(long time) {
+                        Date nowDate = new Date(time * 1000L);
+                        for (PlanTable planData : object) {
+                            Plan plan = new Plan(planData);
+                            Date datePersist = null;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            try {
+                                datePersist = sdf.parse(plan.plan.getDatePersist().getDate());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            int interval = (int)(nowDate.getTime() / (24 * 60 * 60 * 1000)) - (int) (datePersist.getTime() / (24 * 60 * 60 * 1000));
+                            if(interval >= 1 && plan.getStatus()!=Status.FAILED){
+                                plan.setStatus(Status.FAILED);
+                                plan.failPlan(context);
+                            }
+                            planList.add(plan);
+                        }
+                        PlanFragment.getInstance().refreshList(planList);
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+
+                    }
+                });
             }
 
             @Override
@@ -162,21 +188,21 @@ public class Plan implements Comparable<Plan> {
                     e.printStackTrace();
                 }
                 steak = (int) ((datePersist.getTime() - dateFrom.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-                if(target == steak){
+                if (target == steak) {
                     newPlan.setStatus(Status.FINISHED.ordinal());
-                } else{
+                } else {
                     newPlan.setStatus(Status.PROCESSING_CHECKED.ordinal());
                 }
                 newPlan.update(context, plan.getObjectId(), new UpdateListener() {
                     @Override
                     public void onSuccess() {
-                        Log.i("bmob","更新成功");
+                        Log.i("bmob", "更新成功");
                         PlanFragment.getInstance().refresh();
                     }
 
                     @Override
                     public void onFailure(int i, String s) {
-                        Log.i("bmob",s);
+                        Log.i("bmob", s);
                     }
                 });
             }
@@ -196,7 +222,7 @@ public class Plan implements Comparable<Plan> {
         return success;
     }
 
-    public void deletePlan(Context context){
+    public void deletePlan(Context context) {
         PlanTable planTable = new PlanTable();
         planTable.setObjectId(plan.getObjectId());
         planTable.delete(context, new DeleteListener() {
@@ -207,7 +233,24 @@ public class Plan implements Comparable<Plan> {
 
             @Override
             public void onFailure(int i, String s) {
-                Log.i("bmob","删除失败："+ s);
+                Log.i("bmob", "删除失败：" + s);
+            }
+        });
+    }
+
+    public void failPlan(Context context){
+        PlanTable planTable = new PlanTable();
+        planTable.setObjectId(plan.getObjectId());
+        planTable.setStatus(Status.FAILED.ordinal());
+        planTable.update(context, new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                PlanFragment.getInstance().refresh();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Log.i("bmob", "删除失败：" + s);
             }
         });
     }
