@@ -96,11 +96,12 @@ public class PlanListAdapter extends RecyclerView.Adapter {
             {
                 case PROCESSING_UNCHECKED:
                     //item.checkBtn.setSupportBackgroundTintList(ColorStateList.valueOf(0xFFFDB124));
-                    item.cornerLabel.setPaintColor(0xFFDD9104);
+                    item.cornerLabel.setPaintColor(0xFFDDA154);
                     //item.edgeView.setBackgroundColor(0xFFFDB124);
                     break;
                 case PROCESSING_CHECKED:
                     item.cornerLabel.setPaintColor(0xFFFDB124);
+                    break;
                 case FINISHED:
                     item.cornerLabel.setPaintColor(0xFF2AC833);
                     //item.checkBtn.setSupportBackgroundTintList(ColorStateList.valueOf(0xFF2AC833));
@@ -134,7 +135,6 @@ public class PlanListAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).newPlanDialog.show(((MainActivity)context).getSupportFragmentManager(), null);
-                    Plan.getUserPlan(context,planList);
                 }
             });
 

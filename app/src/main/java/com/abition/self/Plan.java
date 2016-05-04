@@ -117,7 +117,7 @@ public class Plan implements Comparable<Plan> {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        this.steak = (int) ((datePersist.getTime() - dateFrom.getTime()) / (24 * 60 * 60 * 1000));
+        this.steak = (int) ((datePersist.getTime() - dateFrom.getTime()) / (24 * 60 * 60 * 1000)) + 1;
         this.target = (int) ((dateTo.getTime() - dateFrom.getTime()) / (24 * 60 * 60 * 1000)) + 1;
     }
 
@@ -135,6 +135,7 @@ public class Plan implements Comparable<Plan> {
                     planList.add(plan);
                     PlanFragment.getInstance().refreshList(planList);
                 }
+                PlanFragment.getInstance().refreshList(planList);
             }
 
             @Override
@@ -151,7 +152,17 @@ public class Plan implements Comparable<Plan> {
                 Date nowDate = new Date(time * 1000L);
                 PlanTable newPlan = new PlanTable();
                 newPlan.setDatePersist(new BmobDate(nowDate));
-                if(target-steak==1){
+                plan.setDatePersist(new BmobDate(nowDate));
+                Date dateFrom = null, datePersist = null;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    dateFrom = sdf.parse(plan.getDateFrom().getDate());
+                    datePersist = sdf.parse(plan.getDatePersist().getDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                steak = (int) ((datePersist.getTime() - dateFrom.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+                if(target == steak){
                     newPlan.setStatus(Status.FINISHED.ordinal());
                 } else{
                     newPlan.setStatus(Status.PROCESSING_CHECKED.ordinal());

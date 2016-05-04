@@ -24,7 +24,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.GetServerTimeListener;
 
 /**
  * Created by KlousesSun on 16/4/23.
@@ -37,7 +39,6 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
     LinearLayout typeImage;
     EditText planTitle;
     Integer themeImage = R.drawable.autumn;
-    PlanListAdapter adapter;
 
     @NonNull
     @Override
@@ -48,20 +49,22 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
         okImage = (ImageView) view.findViewById(R.id.iv_ok);
         typeImage = (LinearLayout) view.findViewById(R.id.ll_type_img);
         planTitle = (EditText)view.findViewById(R.id.title_plan);
-        final Calendar calendar = Calendar.getInstance();
-        String month, day;
-        if (calendar.MONTH > 8) {
-            month = String.valueOf(calendar.MONTH + 1);
-        } else {
-            month = "0" + (calendar.MONTH + 1);
-        }
-        if (calendar.DATE > 9) {
-            day = String.valueOf(calendar.DATE);
-        } else {
-            day = "0" + calendar.DATE;
-        }
-        dateFrom.setText(calendar.get(Calendar.YEAR) + "-" + month + "-" + day);
-        dateTo.setText(calendar.get(Calendar.YEAR) + "-" + month + "-" + day);
+        Bmob.getServerTime(getActivity(), new GetServerTimeListener() {
+            @Override
+            public void onSuccess(long l) {
+                Date now = new Date(l * 1000L);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String nowTime = sdf.format(now);
+                dateFrom.setText(nowTime);
+                dateTo.setText(nowTime);
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Log.i("@@@@@@","can't get time");
+            }
+        });
+
         dateFrom.setOnClickListener(this);
         dateTo.setOnClickListener(this);
         okImage.setOnClickListener(new View.OnClickListener() {
@@ -78,8 +81,8 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
                     e.printStackTrace();
                 }
                 Plan newPlan = new Plan(planTitle.getText().toString(),themeImage,date_from,date_to,getActivity());
-                PlanFragment.getInstance().refresh();
                 dismiss();
+                PlanFragment.getInstance().refresh();
             }
         });
 

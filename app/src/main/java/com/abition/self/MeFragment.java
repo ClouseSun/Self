@@ -49,6 +49,10 @@ public class MeFragment extends Fragment {
             }
         });
 
+        BmobUser user = BmobUser.getCurrentUser(getActivity());
+        TextView idView = (TextView) rootView.findViewById(R.id.text_user_id);
+        idView.setText(user.getUsername());
+
         return rootView;
     }
 
