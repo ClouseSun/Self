@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_login"
     android:orientation="vertical"
@@ -21,13 +21,13 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <ImageView
+    <TextView
+        android:paddingTop="48dp"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="72dp"
-        android:src="@drawable/facebook"
-        android:tint="#FFFFFF"/>
+        android:layout_height="wrap_content"
+        android:text="SELF"
+        android:gravity="center"
+        android:textSize="36sp"/>
 
     <ScrollView
         android:id="@+id/login_form"

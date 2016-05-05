@@ -10,6 +10,7 @@
     tools:context="com.abition.self.MeFragment">
 
     <ImageView
+        android:id="@+id/iv_avatar"
         android:scaleType="fitCenter"
         android:layout_width="72dp"
         android:layout_height="72dp"

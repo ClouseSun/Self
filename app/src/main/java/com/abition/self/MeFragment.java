@@ -1,15 +1,25 @@
 package com.abition.self;
 
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.FileNotFoundException;
+import java.sql.ResultSet;
 
 import cn.bmob.v3.BmobUser;
 
@@ -23,6 +33,7 @@ public class MeFragment extends Fragment {
 
     CardView resetView;
     CardView shareView;
+    ImageView avatar;
 
     public MeFragment() {
         // Required empty public constructor
@@ -44,6 +55,8 @@ public class MeFragment extends Fragment {
 
         shareView = (CardView) rootView.findViewById(R.id.cv_share);
 
+        avatar = (ImageView) rootView.findViewById(R.id.iv_avatar);
+
         resetView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,11 +77,38 @@ public class MeFragment extends Fragment {
             }
         });
 
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, 111);
+            }
+        });
+
         BmobUser user = BmobUser.getCurrentUser(getActivity());
         TextView idView = (TextView) rootView.findViewById(R.id.text_user_id);
         idView.setText(user.getUsername());
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == 111) {
+            Uri uri = data.getData();
+            ContentResolver cr = getActivity().getContentResolver();
+            try {
+                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                avatar.setImageBitmap(bitmap);
+
+
+            } catch (FileNotFoundException e) {
+                Log.e("Exception", e.getMessage(), e);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -33,7 +33,10 @@ public class Plan implements Comparable<Plan> {
 
     @Override
     public int compareTo(Plan another) {
-        return this.status.ordinal() - another.status.ordinal();
+        if(this.getType() != another.getType())
+            return this.getType() - another.getType();
+        else
+            return this.status.ordinal() - another.status.ordinal();
     }
 
     public enum Status {
