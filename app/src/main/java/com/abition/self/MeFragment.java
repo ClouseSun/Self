@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.abition.self.uielement.CircleImageView;
+
 import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 
@@ -32,7 +34,7 @@ public class MeFragment extends Fragment {
 
     CardView resetView;
     CardView shareView;
-    ImageView avatar;
+    CircleImageView avatar;
 
     public MeFragment() {
         // Required empty public constructor
@@ -53,7 +55,7 @@ public class MeFragment extends Fragment {
         resetView = (CardView) rootView.findViewById(R.id.cv_reset_psw);
 
         shareView = (CardView) rootView.findViewById(R.id.cv_share);
-        avatar = (ImageView) rootView.findViewById(R.id.iv_avatar);
+        avatar = (CircleImageView) rootView.findViewById(R.id.cv_avatar);
 
         resetView.setOnClickListener(new View.OnClickListener() {
             @Override
