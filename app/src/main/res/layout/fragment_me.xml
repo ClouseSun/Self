@@ -9,9 +9,8 @@
     android:paddingRight="56dp"
     tools:context="com.abition.self.MeFragment">
 
-    <ImageView
-        android:id="@+id/iv_avatar"
-        android:scaleType="fitCenter"
+    <com.abition.self.uielement.CircleImageView
+        android:id="@+id/cv_avatar"
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_gravity="center_horizontal"
