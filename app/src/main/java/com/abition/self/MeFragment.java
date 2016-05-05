@@ -9,7 +9,10 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.sql.ResultSet;
 
 import cn.bmob.v3.BmobUser;
 
@@ -23,6 +26,7 @@ public class MeFragment extends Fragment {
 
     CardView resetView;
     CardView shareView;
+    ImageView avatar;
 
     public MeFragment() {
         // Required empty public constructor
@@ -61,6 +65,16 @@ public class MeFragment extends Fragment {
                 shareInt.setType("text/plain");
                 startActivity(Intent.createChooser(shareInt,"Sharing to"));
 
+            }
+        });
+
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, 1);
             }
         });
 
