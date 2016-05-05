@@ -28,4 +28,5 @@ dependencies {
 
     // bmob-sdk：Bmob的android sdk包
     compile 'cn.bmob.android:bmob-sdk:3.4.6'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'//自`V3.4.3版本`开始，使用`okhttp`优化SDK的网络框架
 }
