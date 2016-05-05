@@ -25,8 +25,8 @@ public class AchivFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static AchivFragment getInstance(){
-        if(mInstance == null){
+    public static AchivFragment getInstance() {
+        if (mInstance == null) {
             mInstance = new AchivFragment();
         }
         return mInstance;
@@ -39,17 +39,32 @@ public class AchivFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_achiv, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_achiv_list);
 
-        List<Achievement> tempList = new ArrayList<>();
-        tempList.add(new Achievement(R.drawable.trophy, "Amateur", "Create 1st plan", false));
-        tempList.add(new Achievement(R.drawable.trophy, "Brilliant", "Finsh 1st plan", true));
-        tempList.add(new Achievement(R.drawable.trophy, "Combo", "Streak for a week", true));
-        tempList.add(new Achievement(R.drawable.trophy, "Decided", "Streak for over 10 days in one plan", false));
-        tempList.add(new Achievement(R.drawable.trophy, "Enrichment", "Create 5 plans", false));
-        tempList.add(new Achievement(R.drawable.trophy, "Fabulous", "Finish 5 plans", false));
+        List<Plan> planList = new ArrayList<>();
+        Plan.getUserPlan(getActivity(), planList);
 
-        recyclerView.setAdapter(new AchivListAdapter(tempList, getActivity()));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return rootView;
+    }
+
+    public void refreshList(List<Plan> planList) {
+        int planNum = 0, longest = 0, finishNum = 0;
+        for (Plan plan : planList) {
+            planNum++;
+            if (plan.getStatus() == Plan.Status.FINISHED) {
+                finishNum++;
+            }
+            if (plan.getSteak() > longest) {
+                longest = plan.getSteak();
+            }
+        }
+        List<Achievement> tempList = new ArrayList<>();
+        tempList.add(new Achievement(R.drawable.trophy, "Amateur", "Create 1st plan", planNum >= 1));
+        tempList.add(new Achievement(R.drawable.trophy, "Brilliant", "Finish 1st plan", finishNum >= 1));
+        tempList.add(new Achievement(R.drawable.trophy, "Combo", "Streak for a week", longest >= 7));
+        tempList.add(new Achievement(R.drawable.trophy, "Decided", "Streak for over 10 days in one plan", longest >= 10));
+        tempList.add(new Achievement(R.drawable.trophy, "Enrichment", "Create 5 plans", planNum >= 5));
+        tempList.add(new Achievement(R.drawable.trophy, "Fabulous", "Finish 5 plans", finishNum >= 5));
+        recyclerView.setAdapter(new AchivListAdapter(tempList, getActivity()));
     }
 
 }

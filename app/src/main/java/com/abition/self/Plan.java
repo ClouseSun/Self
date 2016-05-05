@@ -54,6 +54,10 @@ public class Plan implements Comparable<Plan> {
         themeStyle.put(R.drawable.love, 0xFFE91E63);
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public Status getStatus() {
         return status;
     }
@@ -78,16 +82,17 @@ public class Plan implements Comparable<Plan> {
         this.title = title;
     }
 
-    public Plan(String title, int type, Date dateFrom, Date dateTo, Context context) {
+    public Plan(String title, int type, Date dateFrom, Date dateTo, Date datePersist, Context context) {
         this.title = title;
         this.type = type;
         this.status = Status.PROCESSING_UNCHECKED;
 
         BmobDate bmobDateFrom = new BmobDate(dateFrom);
         BmobDate bmobDateTo = new BmobDate(dateTo);
+        BmobDate bmobDatePersist = new BmobDate(datePersist);
         BmobUser user = BmobUser.getCurrentUser(context);
         int statusNum = Status.PROCESSING_UNCHECKED.ordinal();
-        PlanTable plan = new PlanTable(title, bmobDateFrom, bmobDateTo, user.getObjectId(), type, statusNum);
+        PlanTable plan = new PlanTable(title, bmobDateFrom, bmobDatePersist, bmobDateTo, user.getObjectId(), type, statusNum);
         this.plan = plan;
         plan.save(context, new SaveListener() {
             @Override
@@ -124,7 +129,7 @@ public class Plan implements Comparable<Plan> {
         this.target = (int) ((dateTo.getTime() - dateFrom.getTime()) / (24 * 60 * 60 * 1000)) + 1;
     }
 
-    static public void getUserPlan(Context context, final List<Plan> planList) {
+    static public void getUserPlan(final Context context, final List<Plan> planList) {
         BmobUser user = BmobUser.getCurrentUser(context);
         BmobQuery<PlanTable> query = new BmobQuery<PlanTable>();
         query.addWhereEqualTo("user_id", user.getObjectId());
@@ -132,13 +137,39 @@ public class Plan implements Comparable<Plan> {
 
         query.findObjects(context, new FindListener<PlanTable>() {
             @Override
-            public void onSuccess(List<PlanTable> object) {
-                for (PlanTable planData : object) {
-                    Plan plan = new Plan(planData);
-                    planList.add(plan);
-                    PlanFragment.getInstance().refreshList(planList);
-                }
-                PlanFragment.getInstance().refreshList(planList);
+            public void onSuccess(final List<PlanTable> object) {
+                Bmob.getServerTime(context, new GetServerTimeListener() {
+                    @Override
+                    public void onSuccess(long time) {
+                        Date nowDate = new Date(time * 1000L);
+                        for (PlanTable planData : object) {
+                            Plan plan = new Plan(planData);
+                            Date datePersist = null;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            try {
+                                datePersist = sdf.parse(plan.plan.getDatePersist().getDate());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            int interval = (int) (nowDate.getTime() / (24 * 60 * 60 * 1000)) - (int) (datePersist.getTime() / (24 * 60 * 60 * 1000));
+                            if (interval >= 2 && plan.getStatus() != Status.FAILED) {
+                                plan.setStatus(Status.FAILED);
+                                plan.changePlanStatus(context, Status.FAILED);
+                            } else if (interval == 1 && plan.getStatus() == Status.PROCESSING_CHECKED) {
+                                plan.setStatus(Status.PROCESSING_UNCHECKED);
+                                plan.changePlanStatus(context, Status.PROCESSING_UNCHECKED);
+                            }
+                            planList.add(plan);
+                        }
+                        PlanFragment.getInstance().refreshList(planList);
+                        AchivFragment.getInstance().refreshList(planList);
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+
+                    }
+                });
             }
 
             @Override
@@ -165,21 +196,21 @@ public class Plan implements Comparable<Plan> {
                     e.printStackTrace();
                 }
                 steak = (int) ((datePersist.getTime() - dateFrom.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-                if(target == steak){
+                if (target == steak) {
                     newPlan.setStatus(Status.FINISHED.ordinal());
-                } else{
+                } else {
                     newPlan.setStatus(Status.PROCESSING_CHECKED.ordinal());
                 }
                 newPlan.update(context, plan.getObjectId(), new UpdateListener() {
                     @Override
                     public void onSuccess() {
-                        Log.i("bmob","更新成功");
+                        Log.i("bmob", "更新成功");
                         PlanFragment.getInstance().refresh();
                     }
 
                     @Override
                     public void onFailure(int i, String s) {
-                        Log.i("bmob",s);
+                        Log.i("bmob", s);
                     }
                 });
             }
@@ -199,7 +230,7 @@ public class Plan implements Comparable<Plan> {
         return success;
     }
 
-    public void deletePlan(Context context){
+    public void deletePlan(Context context) {
         PlanTable planTable = new PlanTable();
         planTable.setObjectId(plan.getObjectId());
         planTable.delete(context, new DeleteListener() {
@@ -210,7 +241,24 @@ public class Plan implements Comparable<Plan> {
 
             @Override
             public void onFailure(int i, String s) {
-                Log.i("bmob","删除失败："+ s);
+                Log.i("bmob", "删除失败：" + s);
+            }
+        });
+    }
+
+    public void changePlanStatus(Context context, Status status) {
+        PlanTable planTable = new PlanTable();
+        planTable.setObjectId(plan.getObjectId());
+        planTable.setStatus(status.ordinal());
+        planTable.update(context, new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                PlanFragment.getInstance().refresh();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Log.i("bmob", "更改状态失败：" + s);
             }
         });
     }

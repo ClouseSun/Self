@@ -16,10 +16,10 @@ public class PlanTable extends BmobObject {
 
     }
 
-    public PlanTable(String title, BmobDate dateFrom, BmobDate dateTo, String user_id, Integer type, Integer status) {
+    public PlanTable(String title, BmobDate dateFrom, BmobDate datePersist, BmobDate dateTo, String user_id, Integer type, Integer status) {
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
-        this.datePersist = dateFrom;
+        this.datePersist = datePersist;
         this.user_id = user_id;
         this.type = type;
         this.title = title;
