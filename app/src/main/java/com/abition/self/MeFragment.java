@@ -1,17 +1,23 @@
 package com.abition.self;
 
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 
 import cn.bmob.v3.BmobUser;
@@ -76,7 +82,7 @@ public class MeFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 111);
             }
         });
 
@@ -103,5 +109,23 @@ public class MeFragment extends Fragment {
             }
         });
     }
+
+    @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                if(requestCode == 111) {
+                        Uri uri = data.getData();
+                        ContentResolver cr = getActivity().getContentResolver();
+                        try {
+                                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                            //// TODO: 16/5/5  
+                                avatar.setImageBitmap(bitmap);
+
+
+                                            } catch (FileNotFoundException e) {
+                                Log.e("Exception", e.getMessage(), e);
+                            }
+                    }
+                super.onActivityResult(requestCode, resultCode, data);
+            }
 
 }
