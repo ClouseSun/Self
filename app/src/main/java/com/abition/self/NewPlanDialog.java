@@ -31,7 +31,7 @@ import cn.bmob.v3.listener.GetServerTimeListener;
 /**
  * Created by KlousesSun on 16/4/23.
  */
-public class NewPlanDialog extends DialogFragment implements View.OnClickListener{
+public class NewPlanDialog extends DialogFragment implements View.OnClickListener {
 
     TextView dateFrom;
     TextView dateTo;
@@ -48,7 +48,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
         dateTo = (TextView) view.findViewById(R.id.tv_date_to);
         okImage = (ImageView) view.findViewById(R.id.iv_ok);
         typeImage = (LinearLayout) view.findViewById(R.id.ll_type_img);
-        planTitle = (EditText)view.findViewById(R.id.title_plan);
+        planTitle = (EditText) view.findViewById(R.id.title_plan);
         Bmob.getServerTime(getActivity(), new GetServerTimeListener() {
             @Override
             public void onSuccess(long l) {
@@ -61,7 +61,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
 
             @Override
             public void onFailure(int i, String s) {
-                Log.i("@@@@@@","can't get time");
+                Log.i("@@@@@@", "can't get time");
             }
         });
 
@@ -70,23 +70,27 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
         okImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date date_from = null,date_to = null;
+                Date date_from = null, date_to = null, date_persist = null;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String dateFromString = dateFrom.getText().toString();
                 String dateToString = dateTo.getText().toString();
                 try {
                     date_from = sdf.parse(dateFromString);
                     date_to = sdf.parse(dateToString);
+                    Calendar calendar = Calendar.getInstance();  //得到日历
+                    calendar.setTime(date_from);//把当前时间赋给日历
+                    calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
+                    date_persist = calendar.getTime();   //得到前一天的时间
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                Plan newPlan = new Plan(planTitle.getText().toString(),themeImage,date_from,date_to,getActivity());
+                Plan newPlan = new Plan(planTitle.getText().toString(), themeImage, date_from, date_to, date_persist, getActivity());
                 dismiss();
                 PlanFragment.getInstance().refresh();
             }
         });
 
-        List<Integer> imageList =  new ArrayList<>();
+        List<Integer> imageList = new ArrayList<>();
         imageList.add(R.drawable.autumn);
         imageList.add(R.drawable.spring);
         imageList.add(R.drawable.winter);
@@ -105,7 +109,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
             circleImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    for(int i = 0; i < typeImage.getChildCount(); i++) {
+                    for (int i = 0; i < typeImage.getChildCount(); i++) {
                         CircleImageView tempCircleImageView = (CircleImageView) typeImage.getChildAt(i);
                         tempCircleImageView.setBorderWidth(0);
                     }
@@ -116,7 +120,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
             });
         }
 
-        if(imageList.size() > 0) {
+        if (imageList.size() > 0) {
             CircleImageView tempCircleImageView = (CircleImageView) typeImage.getChildAt(0);
             tempCircleImageView.setBorderWidth(8);
             tempCircleImageView.setBorderColor(0xFF3CB371);
@@ -126,8 +130,7 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
     }
 
     public void setDateText(String dateText, int from) {
-        switch (from)
-        {
+        switch (from) {
             case R.id.tv_date_from:
                 dateFrom.setText(dateText);
                 break;
