@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,10 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
         okImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (planTitle.getText().length() < 1) {
+                    planTitle.setError(Html.fromHtml("<font color=#FFFFFF>Title shouldn't be empty</font>"));
+                    return;
+                }
                 Date date_from = null, date_to = null, date_persist = null;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String dateFromString = dateFrom.getText().toString();
@@ -77,6 +82,10 @@ public class NewPlanDialog extends DialogFragment implements View.OnClickListene
                 try {
                     date_from = sdf.parse(dateFromString);
                     date_to = sdf.parse(dateToString);
+                    if (date_from.getTime() > date_to.getTime()) {
+                        planTitle.setError(Html.fromHtml("<font color=#FFFFFF>End time should bigger than start time</font>"));
+                        return;
+                    }
                     Calendar calendar = Calendar.getInstance();  //得到日历
                     calendar.setTime(date_from);//把当前时间赋给日历
                     calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天

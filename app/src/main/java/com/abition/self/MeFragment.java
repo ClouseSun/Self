@@ -47,6 +47,7 @@ public class MeFragment extends Fragment {
         resetView = (CardView) rootView.findViewById(R.id.cv_reset_psw);
 
         shareView = (CardView) rootView.findViewById(R.id.cv_share);
+        avatar = (ImageView) rootView.findViewById(R.id.iv_avatar);
 
         resetView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +69,7 @@ public class MeFragment extends Fragment {
             }
         });
 
+        //TODO
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
